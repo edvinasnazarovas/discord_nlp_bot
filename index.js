@@ -1,7 +1,7 @@
 require('dotenv').config();
 const express = require('express');
 const app = express();
-const PORT = process.env.PORT || 8080; // Use the PORT environment variable provided by Azure, or default to 8080
+const PORT = 8080; // Use the PORT environment variable provided by Azure, or default to 8080
 const path = require('path');
 const fs = require("fs");
 const { Client, Collection, Events, GatewayIntentBits, REST, Routes } = require('discord.js');
