@@ -62,6 +62,7 @@
     "xdg-basedir": "^5.1.0"
   },
   "scripts": {
+    "start": "node index.js",
     "test": "echo \"Error: no test specified\""
   },
   "keywords": [],
