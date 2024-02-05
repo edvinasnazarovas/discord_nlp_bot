@@ -1,16 +1,9 @@
 require('dotenv').config();
-const express = require('express');
-const app = express();
-const PORT = 8080; // Use the PORT environment variable provided by Azure, or default to 8080
 const path = require('path');
 const fs = require("fs");
 const { Client, Collection, Events, GatewayIntentBits, REST, Routes } = require('discord.js');
 const { clientId, guildId, token } = require('./config.json');
 const translate = require('translate-google');
-
-app.get('/', (req, res) => res.send('Bot is running!'));
-
-app.listen(PORT, () => console.log(`Server is running on port ${PORT}`));
 
 const client = new Client({ intents: [GatewayIntentBits.Guilds] });
 
