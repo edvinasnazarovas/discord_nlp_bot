@@ -45,6 +45,7 @@
     "resolve-alpn": "^1.2.1",
     "responselike": "^2.0.1",
     "safe-eval": "^0.4.1",
+    "sentiment": "^5.0.2",
     "signal-exit": "^3.0.7",
     "translate-google": "^1.5.0",
     "trim": "^0.0.1",

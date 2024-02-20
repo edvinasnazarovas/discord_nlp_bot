@@ -4,6 +4,8 @@ const fs = require("fs");
 const { Client, Collection, Events, GatewayIntentBits, REST, Routes } = require('discord.js');
 const { clientId, guildId, token } = require('./config.json');
 const translate = require('translate-google');
+const Sentiment = require('sentiment');
+const sentiment = new Sentiment();
 
 const client = new Client({ intents: [GatewayIntentBits.Guilds] });
 
@@ -22,7 +24,6 @@ for (const folder of commandFolders) {
     for (const file of commandFiles) {
         const filePath = path.join(commandsPath, file);
         const command = require(filePath);
-        // Set a new item in the Collection with the key as the command name and the value as the exported module
         if ('data' in command && 'execute' in command) {
             client.commands.set(command.data.name, command);
         } else {
@@ -32,7 +33,6 @@ for (const folder of commandFolders) {
 }
 
 client.on(Events.InteractionCreate, async interaction => {
-    // Existing check for chat input commands
     if (interaction.isChatInputCommand()) {
         const command = interaction.client.commands.get(interaction.commandName);
 
@@ -45,26 +45,16 @@ client.on(Events.InteractionCreate, async interaction => {
             await command.execute(interaction);
         } catch (error) {
             console.error(error);
-            // Existing error handling logic
         }
     }
-    // Add handling for context menu commands
     else if (interaction.isContextMenuCommand()) {
-        // Check if the context menu command is the one for translating messages
-        if (interaction.commandName === 'Translate') {
-            // Fetching the message that was right-clicked
-            const message = await interaction.channel.messages.fetch(interaction.targetId);
+        const message = await interaction.channel.messages.fetch(interaction.targetId);
 
-            try {
-                // Attempting to translate the message content to English
-                const userPreferences = JSON.parse(fs.readFileSync(path.join(__dirname, 'user_prefs.json'), 'utf8')).userPreferences;
-                const targetLanguage = userPreferences[interaction.user.id] || 'en'; // Default to English if no preference set
-                const translation = await translate(message.content, { to: targetLanguage });
-                await interaction.reply({ content: `Translation: ${translation}`, ephemeral: true });
-            } catch (error) {
-                console.error('Translation error:', error);
-                await interaction.reply({ content: 'Error translating the message.', ephemeral: true });
-            }
+        const command = client.commands.get(interaction.commandName);
+        try {
+            await command.execute(interaction);
+        } catch (error) {
+            console.error(`Error executing command: ${error}`);
         }
     }
 });
